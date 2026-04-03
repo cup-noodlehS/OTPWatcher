@@ -1,0 +1,362 @@
+Delivered-To: sheldon@mstr.nl
+Received: by 2002:a05:7412:923:b0:1bb:616f:9a65 with SMTP id 35csp1931906rdi;
+        Tue, 31 Mar 2026 05:46:16 -0700 (PDT)
+X-Received: by 2002:a5d:6851:0:b0:43c:f42e:b9d9 with SMTP id ffacd0b85a97d-43cf42eba85mr15048231f8f.14.1774961176523;
+        Tue, 31 Mar 2026 05:46:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774961176; cv=none;
+        d=google.com; s=arc-20240605;
+        b=XJEsq/p6G8tIMELP/3xF6E9d1fHCyyN11IKN9ZYB6TyXCGmIilIr/nrNowPt+AYOd3
+         x3fgaTGyufUSwi41FvPlHuiWrkLMH2rIvZdHDTPO0d75mJGGAtYEBonfycFkjC0whUvt
+         VnvcKvfPWCpp5m/CrkWpjXLCGaPlES6phQ4U7chT+0CDKX7RZi3UMJTfofNTWdTzDiiC
+         pqN6EGoe8dLWZVAlGkRIlldnQT47hCcRRzmdBgnctpCt4GbVUroOZK7T9bQDMG/U1o99
+         oS7Y+0GJ4AbmIEEIXCYq+grpVtvF1MUGd0Upl+DOM2+ofNNzbcuOj7WcWIYa3WFXH6Li
+         QtXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=mime-version:from:date:message-id:subject:to:dkim-signature;
+        bh=/Ozhe4Rg1IYsYchNY0nrA8BYwDSUQx+JLsCWnjstCSQ=;
+        fh=hEvNNLflJt1xdNIiinP5G+TDsL/A/LKgpeoHQtf4F9g=;
+        b=AnUFjhsPV0XYbor2FmWDTHKo/tzkeKFA44WsvMV3B9qNqB0d0T/ds50OpBd9I6Pn4L
+         FuNsKF7t/hmBtWufIQVWhA1+2goLxN5AVNGgWdre5P+uhhHS8fq+vdMl3ujqbAUK+wcb
+         Tr6xFc97AIOSQiGPWbB10SvCZxK1CUdcpa/5o0oVGN07NVyt4fYzP8FkLmx4AhoR48Tb
+         lWpSNGfIWIizIwUSUCTxg1YNOsu7pKOw+7bAuv+ER7LxZtvGjSzjUvWNhAOQ5tKZDx3X
+         RFppPUC6sqdWSRrk6XP7lnYrGXp1Gr1/Wn8dhUpek4eIpvrSj+nAKhixATUZtgDHk4Z8
+         JYzw==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@hetzner.com header.s=default2403 header.b=ZYwmY6I9;
+       spf=pass (google.com: domain of support@hetzner.com designates 78.46.10.230 as permitted sender) smtp.mailfrom=support@hetzner.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=hetzner.com
+Return-Path: <support@hetzner.com>
+Received: from dediefs.your-server.de (dediefs.your-server.de. [78.46.10.230])
+        by mx.google.com with ESMTPS id ffacd0b85a97d-43cf25a3eafsi22191709f8f.338.2026.03.31.05.46.16
+        for <sheldon@mstr.nl>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2026 05:46:16 -0700 (PDT)
+Received-SPF: pass (google.com: domain of support@hetzner.com designates 78.46.10.230 as permitted sender) client-ip=78.46.10.230;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@hetzner.com header.s=default2403 header.b=ZYwmY6I9;
+       spf=pass (google.com: domain of support@hetzner.com designates 78.46.10.230 as permitted sender) smtp.mailfrom=support@hetzner.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=hetzner.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hetzner.com
+	; s=default2403; h=Content-Type:MIME-Version:From:Date:Message-ID:Subject:To:
+	Sender:Reply-To:Cc:Content-Transfer-Encoding:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References; bh=/Ozhe4Rg1IYsYchNY0nrA8BYwDSUQx+JLsCWnjstCSQ=; b=ZY
+	wmY6I9lSPmqT5GdKoO9JocsyeQHYln/IlF+w3cE5lw36iKz20jP3JgM1n4PlELj9gD6VvLw+TZFDc
+	zaXl69TOx4pDnZNB3b9mzq4/yGiIvyVUEqd1V8g8QOOQ0h4HYXSuUTAfRlp3eRrJENGMJCMj6SKoh
+	aGU8GVKztWOPTFx9vuLkX9/XHIQ5voPcg1Ofvk2/JQaHlN69sumVJDEfpY3OtareNhcZIQX/ghdnI
+	kJ903FYuhn5iD9hdN/qM7ijLptf8iw4tiS8ScCDA6HKOT5GUtySXg+0bnYgT5SZbsiI9kUhZolyY2
+	uQDDYMmBIqgINscFhRzAEm53AH6l3dxQ==;
+Received: from [127.0.0.1] (helo=dediefs.your-server.de)
+	by dediefs.your-server.de with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <support@hetzner.com>)
+	id 1w7YU4-000CNm-0K;
+	Tue, 31 Mar 2026 14:46:16 +0200
+To: sheldon@mstr.nl
+Subject: Your Hetzner verification code is 700575
+Message-ID: <1774961175.69cbc217dcdd2@efs-ws.hetzner.de>
+Date: Tue, 31 Mar 2026 14:46:15 +0200
+From: support@hetzner.com
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="_=_swift_v4_177496117569cbc217dd041_=_"
+
+
+--_=_swift_v4_177496117569cbc217dd041_=_
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+
+
+Dear Client,
+
+Thank you for registering with Hetzner.
+
+To activate your account, please use the following verification code:
+
+700575
+
+Enter this code by April 7, 2026 at 2:46 PM. Alternatively, you can verify
+your account directly using this link:
+
+https://accounts.hetzner.com/signUp/verify/3571251-TtnSnk8Wh5ptWBAcMs2pJ9TxZiGBpcaX
+
+If you have not registered, please ignore this message.
+
+Best regards
+
+Your Hetzner Online Team
+
+Hetzner Online GmbH
+Industriestr. 25
+91710 Gunzenhausen, Germany
+Tel.: +49 9831 505-0
+Fax: +49 9831 505-3
+info@hetzner.com
+www.hetzner.com
+
+CEO: Martin Hetzner,
+Stephan Konvickova, Günther Müller
+Ansbach registration office, HRB 6089
+VAT Reg. No. DE812871812
+
+For the purposes of this communication, we may save some of your
+personal data. For information on our data privacy policy, please see:
+https://www.hetzner.com/datenschutzhinweis
+
+--_=_swift_v4_177496117569cbc217dd041_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 8bit
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Hetzner Online GmbH</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style type="text/css">
+      body {
+          background-color: #f5f5f5;
+          margin: 0;
+          padding: 0;
+      }
+      .logo {
+          text-align: left;
+          padding: 30px 0px 20px 0px !important;
+      }
+      .footer {
+          width: 100%;
+          margin-top: 2em;
+          font-size: 10px;
+          color: #bababa;
+          text-align: center;
+          padding-top: 10px;
+          padding-bottom: 10px;
+      }
+      .footer td,
+      #footer th {
+          padding: 0 2px;
+          white-space: nowrap;
+          line-height: 1px;
+          height: 1px;
+      }
+      .footer a {
+          color: #bababa;
+          text-decoration: none;
+      }
+      h1 {
+          font-family: Arial, Helvetica, sans-serif;
+          text-transform: uppercase;
+          font-size: 21px;
+          font: bold;
+          margin: 1em 0 1em 0;
+      }
+      p.salutation {
+          font-weight: normal;
+          margin: 2em 0 1em 0;
+      }
+      p.client-reference {
+          text-align: right;
+          margin-top: 1em;
+      }
+      pre {
+          background-color: #e2e2e2;
+          padding: 5px;
+          align: center;
+      }
+      a {
+          color: #d50c2d;
+      }
+      a:link,
+      a:visited {
+          text-decoration: none;
+      }
+      a:hover {
+          text-decoration: underline;
+      }
+      table table {
+          max-width: 600px;
+          padding: 0px 0px 0px 0px;
+      }
+      table table td {
+          padding: 10px 20px 0px 20px;
+      }
+      table table table {
+          border: 1px solid #d7d7d7;
+          min-width: 60%;
+          max-width: 80%;
+          padding-bottom: 10px;
+          margin: 2em auto 2em auto;
+      }
+      table table table th,
+      table table table td {
+          padding: 2px 4px 2px 4px;
+      }
+      .thistable {
+          margin: 2em auto 2em auto;
+          border: 1px solid #d7d7d7;
+          min-width: 60%;
+      }
+      .thistable th {
+          background: #ffffff;
+      }
+      .thistable th,
+      .thistable td {
+          padding: 2px 4px 2px 4px;
+          text-align: left;
+      }
+      @media screen {
+          html {
+              background-color: #f5f5f5;
+          }
+          body {
+              background-color: #f5f5f5;
+          }
+          body,
+          td,
+          th,
+          pre.empty,
+          p {
+              font-family: Arial, Helvetica, sans-serif;
+              font-size: 16px;
+              line-height: 1.5;
+              color: #000000;
+          }
+          p {
+              max-width: 55em;
+          }
+          a {
+              color: #d50c2d;
+          }
+          a:link,
+          a:visited {
+              text-decoration: none;
+          }
+          a:hover {
+              text-decoration: underline;
+          }
+      }
+      @media only screen and (max-width: 650px) {
+          .logo {
+              text-align: center;
+              margin: 30px 0px 20px 0px !important;
+              background-color: #f5f5f5;
+          }
+          table {
+              background-color: #ffffff;
+              padding: 0;
+          }
+      }
+      @media print {
+          html,
+          body {
+              font-family: sans-serif;
+              background: #ffffff;
+              border: 0;
+              margin: 0;
+              padding: 0;
+              border-radius: 0;
+          }
+          body,
+          td,
+          th,
+          pre.empty,
+          h1,
+          p {
+              font-size: 10pt;
+          }
+          body {
+              max-width: 210mm;
+          }
+          p {
+              max-width: 210mm;
+          }
+          .footer th {
+              font-size: 9pt;
+          }
+          .logo {
+              margin-bottom: 15mm;
+          }
+          table table td {
+              padding: 0;
+          }
+          a {
+              color: #000000;
+              text-decoration: none;
+          }
+          table table table {
+              border: 1pt solid #d7d7d7;
+          }
+          .thistable {
+              border: 1pt solid #d7d7d7;
+          }
+          .thistable th,
+          .thistable td {
+              border: 0pt solid #d7d7d7;
+              padding: 2px 4px;
+          }
+      }
+  </style>
+</head>
+<body>
+<table width="100%" height="100%" align="center" border="0" cellpadding="0" 
+cellspacing="0" >
+  <tr>
+    <td width="100%" height="100%" bgcolor="#f5f5f5">
+      <table align="center" border="0" cellpadding="0" cellspacing="0" 
+max-width="600">
+        <tr>
+          <td class="logo"><img 
+src="https://cdn.hetzner.com/assets/hetzner-logo-300.png" alt="Hetzner Online 
+GmbH" width="200"/></td></tr>
+        <tr>
+          <td bgcolor="#ffffff" style="padding-bottom: 20px;"><p 
+class="salutation">Dear Client,</p>
+
+<p>Thank you for registering with Hetzner.</p>
+
+<p>To activate your account, please use the following verification code:</p>
+
+<p>700575</p>
+
+<p>Enter this code by April 7, 2026 at 2:46 PM. Alternatively, you can 
+verify your account directly using this link:</p>
+
+<p><a 
+href="https://accounts.hetzner.com/signUp/verify/3571251-TtnSnk8Wh5ptWBAcMs2pJ9TxZiGBpcaX">https://accounts.hetzner.com/signUp/verify/3571251-TtnSnk8Wh5ptWBAcMs2pJ9TxZiGBpcaX</a></p>
+
+<p>If you have not registered, please ignore this message.</p>
+
+<p>Best regards</p>
+
+<p>Your Hetzner Online Team</p>
+  </td>
+</tr>
+<tr>
+  <td bgcolor="#f5f5f5" class="footer">
+    Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen, Germany<br>
+    CEO: Martin Hetzner, Stephan Konvickova, Günther Müller<br>Register 
+Court: Registergericht Ansbach, HRB 6089,
+    VAT Reg. No.: DE812871812
+  </td></tr>
+<tr>
+<td bgcolor="#f5f5f5" class="footer">
+  <a href="https://www.hetzner.com/rechtliches/agb">Terms and Conditions</a>  
+ •   <a href="https://www.hetzner.com/rechtliches/impressum/">Legal 
+Notice</a>    •   <a href="https://www.hetzner.com/datenschutzhinweis">Data 
+Privacy</a>   •   <a 
+href="https://www.hetzner.com/rechtliches/system-policies/">System 
+Policies</a>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>
+
+--_=_swift_v4_177496117569cbc217dd041_=_--
+
