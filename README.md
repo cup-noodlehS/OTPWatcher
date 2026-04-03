@@ -14,6 +14,12 @@
 
 ---
 
+## Demo
+
+https://github.com/cup-noodlehS/OTPWatcher/releases/download/v1.0.0/demo.mp4
+
+---
+
 ## How it works
 
 1. OTPWatcher sits in your menu bar and polls Apple Mail every few seconds
