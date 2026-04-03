@@ -17,19 +17,17 @@ final class AppState {
     }
 
     private func startPolling() {
-        pollingTask = Task { @MainActor [weak self] in
-            while let self = self, self.isMonitoring {
-                self.poll()
+        pollingTask = Task.detached { [weak self] in
+            while let self = self, await self.isMonitoring {
+                let messages = AppleMailBridge.fetchUnreadMessages()
+                await self.process(messages: messages)
                 try? await Task.sleep(for: .seconds(5))
             }
         }
     }
 
-    /// Runs on main thread (NSAppleScript requirement).
     @MainActor
-    private func poll() {
-        let messages = AppleMailBridge.fetchUnreadMessages()
-
+    private func process(messages: [EmailMessage]) {
         // First poll: seed seen IDs silently to ignore pre-existing unread mail
         if !hasRunInitialScan {
             for message in messages {

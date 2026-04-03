@@ -5,7 +5,7 @@ struct OTPWatcherApp: App {
     @State private var appState = AppState()
 
     var body: some Scene {
-        MenuBarExtra("OTPWatcher", systemImage: "lock.shield") {
+        MenuBarExtra("OTPWatcher", image: "MenuBarIcon") {
             MenuBarView(appState: appState)
         }
     }

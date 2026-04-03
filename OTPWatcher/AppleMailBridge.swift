@@ -2,66 +2,81 @@ import Foundation
 
 struct AppleMailBridge {
 
-    /// Fetches recent unread messages from Apple Mail via AppleScript.
-    /// Must be called from the main thread (NSAppleScript requirement).
+    private static let fieldSep = "\u{1E}"  // ASCII Record Separator
+    private static let recordSep = "\u{1F}" // ASCII Unit Separator
+
+    /// Fetches recent unread messages from Apple Mail via osascript subprocess.
     /// Returns empty array if Mail is not running or on any error.
     static func fetchUnreadMessages() -> [EmailMessage] {
+        let fs = "character id 30"  // field separator in AppleScript
+        let rs = "character id 31"  // record separator in AppleScript
+
         let scriptSource = """
+        set fs to \(fs)
+        set rs to \(rs)
         if application "Mail" is not running then
-            return {}
+            return ""
         end if
         tell application "Mail"
-            set results to {}
+            set output to ""
             try
-                set allMsgs to (every message of inbox whose read status is false)
-                set msgCount to count of allMsgs
-                if msgCount > 20 then set msgCount to 20
+                set msgCount to count of messages of inbox
+                if msgCount > 15 then set msgCount to 15
                 repeat with i from 1 to msgCount
-                    set m to item i of allMsgs
-                    try
-                        set msgContent to content of m
-                    on error
-                        set msgContent to ""
-                    end try
-                    set end of results to {(id of m) as string, subject of m, sender of m, msgContent}
+                    set m to message i of inbox
+                    if read status of m is false then
+                        try
+                            set msgContent to content of m
+                        on error
+                            set msgContent to ""
+                        end try
+                        set output to output & (id of m as string) & fs & subject of m & fs & sender of m & fs & msgContent & rs
+                    end if
                 end repeat
             end try
-            return results
+            return output
         end tell
         """
 
-        guard let script = NSAppleScript(source: scriptSource) else {
-            print("[AppleMailBridge] Failed to create AppleScript")
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+        process.arguments = ["-e", scriptSource]
+
+        let pipe = Pipe()
+        let errorPipe = Pipe()
+        process.standardOutput = pipe
+        process.standardError = errorPipe
+
+        do {
+            try process.run()
+            process.waitUntilExit()
+        } catch {
             return []
         }
 
-        var error: NSDictionary?
-        let result = script.executeAndReturnError(&error)
+        guard process.terminationStatus == 0 else { return [] }
 
-        if let error = error {
-            print("[AppleMailBridge] AppleScript error: \(error)")
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        guard let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !output.isEmpty else {
             return []
         }
 
-        let count = result.numberOfItems
-        guard count > 0 else { return [] }
-
+        let records = output.components(separatedBy: recordSep).filter { !$0.isEmpty }
         var messages: [EmailMessage] = []
 
-        for i in 1...count {
-            guard let record = result.atIndex(i) else { continue }
-            let id = record.atIndex(1)?.stringValue ?? ""
-            let subject = record.atIndex(2)?.stringValue ?? ""
-            let sender = record.atIndex(3)?.stringValue ?? ""
-            let body = record.atIndex(4)?.stringValue ?? ""
+        for record in records {
+            let fields = record.components(separatedBy: fieldSep)
+            guard fields.count >= 4 else { continue }
 
+            let id = fields[0]
             guard !id.isEmpty else { continue }
 
             messages.append(EmailMessage(
                 id: id,
-                subject: subject,
-                sender: sender,
-                body: body,
+                subject: fields[1],
+                sender: fields[2],
+                body: fields[3],
                 dateReceived: Date()
             ))
         }

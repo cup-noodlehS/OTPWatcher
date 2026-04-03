@@ -6,12 +6,19 @@ struct OTPDetector {
         "verification code", "security code", "one-time", "otp",
         "login code", "sign-in code", "sign in code", "authentication code",
         "confirm your", "verify your", "use this code", "enter this code",
-        "your code is", "your code:", "use code", "passcode"
+        "your code is", "your code:", "use code", "passcode",
+        "to sign in", "to log in"
     ]
 
-    /// Pattern 1: code near a keyword phrase (e.g. "code is 482913", "OTP: 654321")
-    private static let nearKeywordPattern = try! NSRegularExpression(
+    /// Pattern 1a: code after a keyword phrase (e.g. "code is 482913", "OTP: 654321")
+    private static let codeAfterKeywordPattern = try! NSRegularExpression(
         pattern: #"(?:code|otp|password|passcode)[\s:]+(?:is\s+)?(\d{4,8})"#,
+        options: .caseInsensitive
+    )
+
+    /// Pattern 1b: code before a keyword phrase (e.g. "Use 128004 to sign in")
+    private static let codeBeforeKeywordPattern = try! NSRegularExpression(
+        pattern: #"\b(\d{4,8})\b.{0,20}(?:to\s+(?:sign|log)\s*in|to\s+verify|to\s+confirm)"#,
         options: .caseInsensitive
     )
 
@@ -36,7 +43,10 @@ struct OTPDetector {
         guard hasKeyword else { return nil }
 
         // Stage 2: extract code (try patterns in priority order)
-        if let code = extractNearKeyword(text) {
+        if let code = extractCodeAfterKeyword(text) {
+            return DetectedCode(code: code, sender: message.sender, subject: message.subject, detectedAt: Date())
+        }
+        if let code = extractCodeBeforeKeyword(text) {
             return DetectedCode(code: code, sender: message.sender, subject: message.subject, detectedAt: Date())
         }
         if let code = extractStandalone(text) {
@@ -51,9 +61,19 @@ struct OTPDetector {
 
     // MARK: - Extraction
 
-    private static func extractNearKeyword(_ text: String) -> String? {
+    private static func extractCodeAfterKeyword(_ text: String) -> String? {
         let range = NSRange(text.startIndex..., in: text)
-        guard let match = nearKeywordPattern.firstMatch(in: text, range: range),
+        guard let match = codeAfterKeywordPattern.firstMatch(in: text, range: range),
+              let codeRange = Range(match.range(at: 1), in: text) else {
+            return nil
+        }
+        let code = String(text[codeRange])
+        return isFalsePositive(code, in: text) ? nil : code
+    }
+
+    private static func extractCodeBeforeKeyword(_ text: String) -> String? {
+        let range = NSRange(text.startIndex..., in: text)
+        guard let match = codeBeforeKeywordPattern.firstMatch(in: text, range: range),
               let codeRange = Range(match.range(at: 1), in: text) else {
             return nil
         }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="eyeClip">
+      <path d="M22 80 C22 56,138 56,138 80 C138 104,22 104,22 80 Z"/>
+    </clipPath>
+  </defs>
+
+  <rect x="0" y="0" width="160" height="160" rx="36" fill="#111827"/>
+
+  <path d="M22 80 C22 56,138 56,138 80 C138 104,22 104,22 80 Z" fill="white"/>
+
+  <circle cx="80" cy="80" r="28" fill="#4361ee" clip-path="url(#eyeClip)"/>
+
+  <ellipse cx="93" cy="67" rx="7" ry="4" fill="rgba(255,255,255,0.28)" clip-path="url(#eyeClip)"/>
+
+  <circle cx="60"  cy="80" r="3" fill="white"/>
+  <circle cx="69"  cy="80" r="3" fill="white"/>
+  <circle cx="78"  cy="80" r="3" fill="white"/>
+
+  <rect x="79" y="77" width="2" height="6" rx="1" fill="rgba(255,255,255,0.45)"/>
+
+  <circle cx="91"  cy="80" r="3" fill="white"/>
+  <circle cx="100" cy="80" r="3" fill="white"/>
+  <circle cx="109" cy="80" r="3" fill="white"/>
+</svg>
