@@ -19,21 +19,24 @@ struct AppleMailBridge {
         end if
         tell application "Mail"
             set output to ""
-            try
-                set msgCount to count of messages of inbox
-                if msgCount > 15 then set msgCount to 15
-                repeat with i from 1 to msgCount
-                    set m to message i of inbox
-                    if read status of m is false then
-                        try
-                            set msgContent to content of m
-                        on error
-                            set msgContent to ""
-                        end try
-                        set output to output & (id of m as string) & fs & subject of m & fs & sender of m & fs & msgContent & rs
-                    end if
-                end repeat
-            end try
+            repeat with acct in (every account)
+                try
+                    set acctInbox to mailbox "INBOX" of acct
+                    set msgCount to count of messages of acctInbox
+                    if msgCount > 10 then set msgCount to 10
+                    repeat with i from 1 to msgCount
+                        set m to message i of acctInbox
+                        if read status of m is false then
+                            try
+                                set msgContent to content of m
+                            on error
+                                set msgContent to ""
+                            end try
+                            set output to output & (id of m as string) & fs & subject of m & fs & sender of m & fs & msgContent & rs
+                        end if
+                    end repeat
+                end try
+            end repeat
             return output
         end tell
         """
