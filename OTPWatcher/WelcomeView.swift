@@ -88,7 +88,7 @@ struct WelcomeView: View {
             .controlSize(.large)
             .padding(.bottom, 24)
         }
-        .frame(width: 400, height: 580)
+        .frame(width: 400, height: 680)
     }
 }
 
