@@ -25,3 +25,6 @@ Package.resolved
 # Build artifacts
 OTPWatcher.zip
 /tmp/otpwatcher_debug.log
+
+# Sensitive data
+sample_emails/
