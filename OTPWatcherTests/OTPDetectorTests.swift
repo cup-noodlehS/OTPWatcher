@@ -108,6 +108,29 @@ final class OTPDetectorTests: XCTestCase {
         XCTAssertNil(result, "Generic greeting should not be detected as OTP")
     }
 
+    // MARK: - Real email: Temu verification (code in subject before keyword)
+
+    func testTemuVerificationCodeInSubject() {
+        let subject = "262383 is your verification code"
+        let body = """
+            Hi sheldonarthursagrado
+            Please verify your email address using the following verification code:
+            262383
+            It is valid for the next 10 minutes. This is an automatically generated email, please do not reply.
+            Thank you
+            NOTE: This is an automatically generated email, please do not reply.
+            Office address: 6 Raffles Quay, #14-06, Singapore (Postal 048580) Please note, returns will not be accepted at this address.
+            If you want to return items, please request a return and use Temu's label.
+            """
+        let message = makeMessage(
+            subject: subject,
+            body: body,
+            sender: "temu@user.temu.com"
+        )
+        let result = OTPDetector.detect(message: message)
+        XCTAssertEqual(result?.code, "262383", "Should extract 262383, not postal code 048580")
+    }
+
     // MARK: - False positive edge cases
 
     func testYearFalsePositive() {

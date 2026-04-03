@@ -16,9 +16,9 @@ struct OTPDetector {
         options: .caseInsensitive
     )
 
-    /// Pattern 1b: code before a keyword phrase (e.g. "Use 128004 to sign in")
+    /// Pattern 1b: code before a keyword phrase (e.g. "262383 is your verification code", "Use 128004 to sign in")
     private static let codeBeforeKeywordPattern = try! NSRegularExpression(
-        pattern: #"\b(\d{4,8})\b.{0,20}(?:to\s+(?:sign|log)\s*in|to\s+verify|to\s+confirm)"#,
+        pattern: #"\b(\d{4,8})\b.{0,30}(?:is\s+your\s+(?:verification|security|authentication)\s+code|to\s+(?:sign|log)\s*in|to\s+verify|to\s+confirm)"#,
         options: .caseInsensitive
     )
 
@@ -117,13 +117,14 @@ struct OTPDetector {
             return true
         }
 
-        // Skip if candidate appears near footer phrases
+        // Skip if candidate appears near footer/address phrases
         let lower = text.lowercased()
         if let codeRange = lower.range(of: code.lowercased()) {
             let start = lower.index(codeRange.lowerBound, offsetBy: -80, limitedBy: lower.startIndex) ?? lower.startIndex
             let end = lower.index(codeRange.upperBound, offsetBy: 80, limitedBy: lower.endIndex) ?? lower.endIndex
             let context = String(lower[start..<end])
-            let footerTerms = ["unsubscribe", "privacy policy", "terms of service", "opt out", "copyright"]
+            let footerTerms = ["unsubscribe", "privacy policy", "terms of service", "opt out", "copyright",
+                               "postal", "zip code", "office address", "mailing address", "p.o. box"]
             if footerTerms.contains(where: { context.contains($0) }) {
                 return true
             }
