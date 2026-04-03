@@ -3,6 +3,7 @@ import SwiftUI
 struct MenuBarView: View {
     let appState: AppState
     @State private var copiedFeedback = false
+    @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         if let detected = appState.lastDetectedCode {
@@ -37,6 +38,14 @@ struct MenuBarView: View {
         }
 
         Divider()
+
+        Button("How It Works...") {
+            NSApp.setActivationPolicy(.regular)
+            openWindow(id: "welcome")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                NSApp.activate(ignoringOtherApps: true)
+            }
+        }
 
         Button("Quit OTPWatcher") {
             NSApplication.shared.terminate(nil)
