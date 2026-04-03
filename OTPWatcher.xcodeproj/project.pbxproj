@@ -14,6 +14,7 @@
 		A10000000000000000000D /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000C /* NotificationManager.swift */; };
 		A10000000000000000000F /* ClipboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000E /* ClipboardManager.swift */; };
 		A100000000000000000013 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000012 /* AppState.swift */; };
+		A100000000000000000015 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000014 /* MenuBarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		A10000000000000000000C /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		A10000000000000000000E /* ClipboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardManager.swift; sourceTree = "<group>"; };
 		A100000000000000000012 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		A100000000000000000014 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 				A10000000000000000000C /* NotificationManager.swift */,
 				A10000000000000000000E /* ClipboardManager.swift */,
 				A100000000000000000012 /* AppState.swift */,
+				A100000000000000000014 /* MenuBarView.swift */,
 				A100000000000000000005 /* Info.plist */,
 				A100000000000000000006 /* OTPWatcher.entitlements */,
 			);
@@ -131,6 +134,7 @@
 				A10000000000000000000D /* NotificationManager.swift in Sources */,
 				A10000000000000000000F /* ClipboardManager.swift in Sources */,
 				A100000000000000000013 /* AppState.swift in Sources */,
+				A100000000000000000015 /* MenuBarView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
