@@ -40,11 +40,8 @@ struct MenuBarView: View {
         Divider()
 
         Button("How It Works...") {
-            NSApp.setActivationPolicy(.regular)
             openWindow(id: "welcome")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                NSApp.activate(ignoringOtherApps: true)
-            }
+            NSApp.activate(ignoringOtherApps: true)
         }
 
         Button("Quit OTPWatcher") {
